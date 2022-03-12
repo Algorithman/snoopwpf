@@ -127,15 +127,15 @@
                       SelectedItem="{Binding CurrentTreeType, Mode=TwoWay}" />
             <Menu>
                 <MenuItem Header="File">
-                    <MenuItem Command="{x:Static ApplicationCommands.Close}"
-                              Header="Close window" />
+                    <MenuItem Header="Close window"
+                              Command="{x:Static ApplicationCommands.Close}" />
                 </MenuItem>
                 <MenuItem Header="Settings">
-                    <MenuItem Click="HandleOpenSettingsFolder_OnClick"
-                              Header="Open settings folder" />
+                    <MenuItem Header="Open settings folder"
+                              Click="HandleOpenSettingsFolder_OnClick" />
                     <Separator />
-                    <MenuItem Click="HandleResetSettings_OnClick"
-                              Header="Reset settings and close window" />
+                    <MenuItem Header="Reset settings"
+                              Click="HandleResetSettings_OnClick" />
                 </MenuItem>
                 <MenuItem Header="_Tracking options">
                     <MenuItem Header="Skip template parts"
