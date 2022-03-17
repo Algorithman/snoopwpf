@@ -11,6 +11,7 @@ namespace Snoop.Infrastructure
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Linq;
+    using System.Reflection;
     using System.Windows;
     using System.Windows.Automation.Peers;
     using System.Windows.Controls;
@@ -24,7 +25,7 @@ namespace Snoop.Infrastructure
 
     public class PropertyInformation : DependencyObject, IComparable, INotifyPropertyChanged
     {
-        private static readonly Attribute[] getAllPropertiesAttributeFilter = { new PropertyFilterAttribute(PropertyFilterOptions.All) };
+        private static readonly Attribute[] getAllPropertiesAttributeFilter = { PropertyFilterAttribute.Default };
 
         private readonly object? component;
         private readonly bool isCopyable;
@@ -33,6 +34,8 @@ namespace Snoop.Infrastructure
         private ValueSource valueSource;
 
         private readonly PropertyDescriptor? property;
+        private bool wasTriedAsDependencyProperty;
+        private DependencyProperty? dependencyProperty;
         private readonly string name;
         private readonly string displayName;
         private bool isLocallySet;
@@ -498,8 +501,13 @@ namespace Snoop.Infrastructure
                 if (this.property is null)
                 {
                     // if this is a PropertyInformation object constructed for an item in a collection
-                    //return false;
                     return this.isCopyable;
+                }
+
+                if (this.Target is SetterBase { IsSealed: true }
+                    or Style { IsSealed: true })
+                {
+                    return false;
                 }
 
                 return this.property.IsReadOnly == false;
@@ -618,16 +626,18 @@ namespace Snoop.Infrastructure
         {
             get
             {
-                if (this.property is not null)
+                if (this.dependencyProperty is not null)
                 {
-                    // in order to be a DependencyProperty, the object must first be a regular property,
-                    // and not an item in a collection.
+                    return this.dependencyProperty;
+                }
 
-                    var dpd = DependencyPropertyDescriptor.FromProperty(this.property);
-                    if (dpd is not null)
-                    {
-                        return dpd.DependencyProperty;
-                    }
+                if (this.property is not null
+                    && this.wasTriedAsDependencyProperty == false)
+                {
+                    this.wasTriedAsDependencyProperty = true;
+                    this.dependencyProperty = DependencyPropertyDescriptor.FromProperty(this.property)?.DependencyProperty;
+
+                    return this.dependencyProperty;
                 }
 
                 return null;
@@ -767,6 +777,15 @@ namespace Snoop.Infrastructure
                     {
                         LogHelper.WriteError($"Failed to create PropertyInformation for property '{property.Name}' on '{obj}'.{Environment.NewLine}{e}");
                     }
+                }
+            }
+
+            if (obj is FrameworkElement)
+            {
+                const string defaultStyleKeyPropertyName = "DefaultStyleKey";
+                if (obj.GetType().GetProperty(defaultStyleKeyPropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) is not null)
+                {
+                    properties.Add(new(obj, TypeDescriptor.CreateProperty(obj.GetType(), defaultStyleKeyPropertyName, typeof(Style)), defaultStyleKeyPropertyName, defaultStyleKeyPropertyName));
                 }
             }
 

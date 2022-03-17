@@ -928,6 +928,8 @@ namespace Snoop.Windows
 
         private void HandleSnoopSnoop_OnClick(object sender, RoutedEventArgs e)
         {
+            SnoopPartsRegistry.IsSnoopingSnoop = true;
+
             new SnoopUI().Inspect(this);
         }
 

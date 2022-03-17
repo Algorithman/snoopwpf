@@ -156,14 +156,14 @@
                     <MenuItem Header="Highlight selected item"
                               IsCheckable="True"
                               IsChecked="{Binding HighlightSelectedItem, Source={x:Static selectionHighlight:SelectionHighlightOptions.Default}}" />
-                    <MenuItem Click="HandleHighlightOptions_OnClick"
-                              Header="Highlight options ..." />
+                    <MenuItem Header="Highlight options ..."
+                              Click="HandleHighlightOptions_OnClick" />
                 </MenuItem>
                 <MenuItem Header="_Debug">
-                    <MenuItem Click="HandleLaunchDebugger_OnClick"
-                              Header="Launch debugger" />
-                    <MenuItem Click="HandleSnoopSnoop_OnClick"
-                              Header="Snoop Snoop" />
+                    <MenuItem Header="Launch debugger"
+                              Click="HandleLaunchDebugger_OnClick" />
+                    <MenuItem Header="Snoop Snoop"
+                              Click="HandleSnoopSnoop_OnClick" />
                 </MenuItem>
             </Menu>
         </StackPanel>
@@ -250,16 +250,16 @@
                             <Setter.Value>
                                 <ContextMenu>
                                     <MenuItem Header="Export">
-                                        <MenuItem Command="{x:Static windows:SnoopUI.ExportTreeWithFilterCommand}"
-                                                  Header="Tree (with filter)">
+                                        <MenuItem Header="Tree (with filter)"
+                                                  Command="{x:Static windows:SnoopUI.ExportTreeWithFilterCommand}">
                                             <MenuItem.CommandParameter>
                                                 <infrastructure:ExportOptions Recurse="True"
                                                                               TreeItem="{Binding}"
                                                                               UseFilter="True" />
                                             </MenuItem.CommandParameter>
                                         </MenuItem>
-                                        <MenuItem Command="{x:Static windows:SnoopUI.ExportTreeWithFilterCommand}"
-                                                  Header="Tree (without filter)">
+                                        <MenuItem Header="Tree (without filter)"
+                                                  Command="{x:Static windows:SnoopUI.ExportTreeWithFilterCommand}">
                                             <MenuItem.CommandParameter>
                                                 <infrastructure:ExportOptions Recurse="True"
                                                                               TreeItem="{Binding}" />
@@ -268,16 +268,16 @@
 
                                         <Separator />
 
-                                        <MenuItem Command="{x:Static windows:SnoopUI.ExportTreeWithFilterCommand}"
-                                                  Header="Element (with filter)">
+                                        <MenuItem Header="Element (with filter)"
+                                                  Command="{x:Static windows:SnoopUI.ExportTreeWithFilterCommand}">
                                             <MenuItem.CommandParameter>
                                                 <infrastructure:ExportOptions Recurse="False"
                                                                               TreeItem="{Binding}"
                                                                               UseFilter="True" />
                                             </MenuItem.CommandParameter>
                                         </MenuItem>
-                                        <MenuItem Command="{x:Static windows:SnoopUI.ExportTreeWithFilterCommand}"
-                                                  Header="Element (without filter)">
+                                        <MenuItem Header="Element (without filter)"
+                                                  Command="{x:Static windows:SnoopUI.ExportTreeWithFilterCommand}">
                                             <MenuItem.CommandParameter>
                                                 <infrastructure:ExportOptions Recurse="False"
                                                                               TreeItem="{Binding}" />
